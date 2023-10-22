@@ -706,7 +706,13 @@ class Settings:
         self.krool_tiny = False
         self.krool_chunky = False
 
-        phases = kongs.copy()
+        phases = [
+            Maps.KroolDonkeyPhase, 
+            Maps.KroolDiddyPhase, 
+            Maps.KroolLankyPhase, 
+            Maps.KroolTinyPhase, 
+            Maps.KroolChunkyPhase,
+        ]
         if self.krool_phase_order_rando:
             random.shuffle(phases)
         if self.krool_random:
@@ -719,19 +725,19 @@ class Settings:
         for kong in phases:
             if kong == Kongs.donkey:
                 self.krool_donkey = True
-                orderedPhases.append(Kongs.donkey)
+                orderedPhases.append(Maps.KroolDonkeyPhase)
             if kong == Kongs.diddy:
                 self.krool_diddy = True
-                orderedPhases.append(Kongs.diddy)
+                orderedPhases.append(Maps.KroolDiddyPhase)
             if kong == Kongs.lanky:
                 self.krool_lanky = True
-                orderedPhases.append(Kongs.lanky)
+                orderedPhases.append(Maps.KroolLankyPhase)
             if kong == Kongs.tiny:
                 self.krool_tiny = True
-                orderedPhases.append(Kongs.tiny)
+                orderedPhases.append(Maps.KroolTinyPhase)
             if kong == Kongs.chunky:
                 self.krool_chunky = True
-                orderedPhases.append(Kongs.chunky)
+                orderedPhases.append(Maps.KroolChunkyPhase)
         self.krool_order = orderedPhases
 
         # Helm Order

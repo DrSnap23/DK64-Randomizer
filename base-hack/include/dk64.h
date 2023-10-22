@@ -71,6 +71,7 @@ extern void clearGun(void* player);
 extern void playAnimation(void* player, int anim_index);
 extern void clearTagSlide(void* player);
 extern void initiateTransitionFade(maps map, int cutscene, int gamemode);
+extern void initiateTransitionCutscene(maps map, int cutscene);
 extern void __osInvalICache(void* write_location, int size);
 extern void __osInvalDCache(void* write_location, int size);
 extern void __osWritebackDCache(void* write_location, int size);

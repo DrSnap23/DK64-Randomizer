@@ -205,7 +205,7 @@ extern void modifyCutscenePointTime(int bank, int cutscene, int point, int new_t
 extern void modifyCutscenePointCount(int bank, int cutscene, int point_count);
 extern void createCutscene(int bank, int cutscene, int point_count);
 extern void HelmInit(int init_stage);
-extern void initKRool(int phase);
+extern void initKRool(maps map);
 extern void handleSFXCache(void);
 extern void preventMedalHUD(int item, int unk0, int unk1);
 extern void initHUDDirection(placementData* hud_data, int item);

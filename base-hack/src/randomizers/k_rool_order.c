@@ -7,6 +7,29 @@ static const int krool_write_locations[] = {
 	0x8002FAF2, // Tiny > Chunky
 };
 
+void BossComplete(int object, int x_f, int y_f, int z_f, int unk0, int cutscene, int flag, int unk1) {
+	// Check Level Bosses
+	for (int i = 0; i < 7; i++) {
+		if (CurrentMap == BossMapArray[i]) {
+			spawnBossReward(object, x_f, y_f, z_f, unk0, cutscene, flag, unk1);
+			return;
+		}
+	}
+	// Check K. Rool
+	for (int i = 0; i < 5; i++) {
+		if (CurrentMap == Rando.k_rool_order[i]) {
+			// Get segment progress
+			int next = Rando.k_rool_order[i];
+			if (next != KROOL_PHASE_NULL) {
+				initiateTransition(next, 0);
+			} else {
+				initiateTransitionCutscene(MAP_ISLES, 29);
+			}
+			return;
+		}
+	}
+}
+
 void determine_krool_order(void) {
 	int containing = 0;
 	int destination = 0;
@@ -21,8 +44,8 @@ void determine_krool_order(void) {
 				for (int i = 0; i < 4; i++) {
 					containing = Rando.k_rool_order[i];
 					destination = Rando.k_rool_order[i + 1];
-					if ((containing > -1) && (destination > -1) && (containing < 4)) {
-						*(short*)(*(int*)((int)&krool_write_locations[containing])) = MAP_KROOLDK + destination;
+					if ((containing != KROOL_PHASE_NULL) && (destination != KROOL_PHASE_NULL) && (containing < MAP_KROOLCHUNKY)) {
+						*(short*)(*(int*)((int)&krool_write_locations[containing - MAP_KROOLDK])) = destination;
 					}
 				}
 			}
@@ -42,18 +65,18 @@ void disable_krool_health_refills(void) {
 	}
 }
 
-void initKRool(int phase) {
+void initKRool(maps map) {
 	int is_last = 0;
 	int next_phase = -1;
 	int found_phase = 0;
 	int found_next = 0;
 	int microbuffer_cutscenes[] = {4,3,5,3,4};
 	for (int i = 0; i < 5; i++) {
-		if (Rando.k_rool_order[i] == phase) {
+		if (Rando.k_rool_order[i] == map) {
 			found_phase = 1;
 		} else {
 			if ((found_phase) && (!found_next)) {
-				if (Rando.k_rool_order[i] == -1) {
+				if (Rando.k_rool_order[i] == KROOL_PHASE_NULL) {
 					is_last = 1;
 				} else {
 					next_phase = Rando.k_rool_order[i];
@@ -66,17 +89,17 @@ void initKRool(int phase) {
 		// If phase length is 5 phases
 		is_last = 1;
 	}
-	if (phase == 4) {
+	if (map == MAP_KROOLCHUNKY) {
 		if (!is_last) {
 			modifyCutsceneItem(0, 7, 8, 12, 0); // Set to Kremlings Running Out Cutscene
-			modifyCutsceneItem(0, 8, 0x29, MAP_KROOLDK + next_phase, microbuffer_cutscenes[next_phase]); // Set to Kremlings Running Out Cutscene
+			modifyCutsceneItem(0, 8, 0x29, next_phase, microbuffer_cutscenes[next_phase - MAP_KROOLDK]); // Set to Kremlings Running Out Cutscene
 			modifyCutscenePoint(0, 22, 40, 7); // Overwrite playsong call with change of cutscene
 			modifyCutscenePoint(0, 12, 22, 8); // End of cutscene 12 should bring you to next phase
 		}
 	} else {
 		if (is_last) {
 			int phase_items[] = {134,102,111,174};
-			modifyCutsceneItem(0, phase_items[phase], 0x29, MAP_ISLES, 29);
+			modifyCutsceneItem(0, phase_items[map - MAP_KROOLDK], 0x29, MAP_ISLES, 29);
 		}
 	}
 }
@@ -103,9 +126,13 @@ void handleKRoolSaveProgress(void) {
 			// Load Progress
 			int latest_map = -1;
 			for (int i = 1; i < 5; i++) {
-				if (Rando.k_rool_order[i] != -1) {
-					if (checkFlag(FLAG_KROOL_ENTERED + Rando.k_rool_order[i], 0)) {
-						latest_map = MAP_KROOLDK + Rando.k_rool_order[i];
+				if (Rando.k_rool_order[i] != KROOL_PHASE_NULL) {
+					if (checkFlag(FLAG_KROOL_ENTERED + Rando.k_rool_order[i] - MAP_KROOLDK, 0)) {
+						if (Rando.k_rool_order[i] == KROOL_PHASE_NULL) {
+							latest_map = -1;
+						} else {
+							latest_map = Rando.k_rool_order[i];
+						}
 					}
 				}
 			}

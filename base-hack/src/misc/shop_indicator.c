@@ -500,7 +500,7 @@ void newCounterCode(void) {
 				paad->image_slots[i] = loadFontTexture_Counter(paad->image_slots[i], 0, i);
 			}
 			int id = getActorSpawnerIDFromTiedActor(CurrentActorPointer_0);
-			int face = Rando.k_rool_order[id - 0x100];
+			int face = Rando.k_rool_order[id - 0x100] - MAP_KROOLDK;
 			CurrentActorPointer_0->rot_z = 3072; // Facing vertical
 			paad->image_slots[1] = loadFontTexture_Counter(paad->image_slots[1], face+1, 1);
 		}

@@ -537,8 +537,7 @@ void parseCutsceneData(void) {
 	 */
 	wipeCounterImageCache();
 	if ((CurrentMap >= MAP_KROOLDK) && (CurrentMap <= MAP_KROOLCHUNKY)) {
-		int phase = CurrentMap - MAP_KROOLDK;
-		initKRool(phase);
+		initKRool(CurrentMap);
 	}
 	if (Rando.cutscene_skip_setting == CSSKIP_AUTO) {
 		updateSkippableCutscenes();
