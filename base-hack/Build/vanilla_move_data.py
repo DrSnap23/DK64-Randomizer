@@ -1,5 +1,6 @@
 """Get vanilla move data."""
 from typing import BinaryIO
+from enum import IntEnum, auto
 
 special_move_prices = [3, 5, 7]
 gun_price = 3
@@ -11,11 +12,22 @@ ins_upg_prices = [5, 7, 9]
 
 DEFAULT_SLAM_PURCHASE = 1
 
+class MoveGroup(IntEnum):
+    """Enum to store the master group of move."""
+    special = auto()
+    slam = auto()
+    gun = auto()
+    belt = auto()
+    instrument = auto()
+    flag = auto()
+    gb = auto()
+    nothing = auto()
+
 
 class MoveType:
     """Class which stores info about move types."""
 
-    def __init__(self, type, index=1, price=0):
+    def __init__(self, type: MoveGroup, index=1, price=0):
         """Initialize with given data."""
         self.type = type
         self.index = index
@@ -23,37 +35,37 @@ class MoveType:
 
 
 cranky_0 = [
-    MoveType("special", 1, 3),
-    MoveType("special", 2, 5),
-    MoveType("special", 3, 7),
-    MoveType("nothing"),
-    MoveType("slam", DEFAULT_SLAM_PURCHASE, 5),
-    MoveType("nothing"),
-    MoveType("slam", DEFAULT_SLAM_PURCHASE, 7),
-    MoveType("nothing"),
+    MoveType(MoveGroup.special, 1, 3),
+    MoveType(MoveGroup.special, 2, 5),
+    MoveType(MoveGroup.special, 3, 7),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.slam, DEFAULT_SLAM_PURCHASE, 5),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.slam, DEFAULT_SLAM_PURCHASE, 7),
+    MoveType(MoveGroup.nothing),
 ]
 cranky_1 = [
-    MoveType("special", 1, 3),
-    MoveType("nothing"),
-    MoveType("special", 2, 5),
-    MoveType("nothing"),
-    MoveType("slam", DEFAULT_SLAM_PURCHASE, 5),
-    MoveType("special", 3, 7),
-    MoveType("slam", DEFAULT_SLAM_PURCHASE, 7),
-    MoveType("nothing"),
+    MoveType(MoveGroup.special, 1, 3),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.special, 2, 5),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.slam, DEFAULT_SLAM_PURCHASE, 5),
+    MoveType(MoveGroup.special, 3, 7),
+    MoveType(MoveGroup.slam, DEFAULT_SLAM_PURCHASE, 7),
+    MoveType(MoveGroup.nothing),
 ]
 
-funky = [MoveType("gun", 1, 3), MoveType("nothing"), MoveType("ammo_belt", 1, 3), MoveType("nothing"), MoveType("gun", 2, 5), MoveType("ammo_belt", 2, 5), MoveType("gun", 3, 7), MoveType("nothing")]
+funky = [MoveType(MoveGroup.gun, 1, 3), MoveType(MoveGroup.nothing), MoveType(MoveGroup.belt, 1, 3), MoveType(MoveGroup.nothing), MoveType(MoveGroup.gun, 2, 5), MoveType(MoveGroup.belt, 2, 5), MoveType(MoveGroup.gun, 3, 7), MoveType(MoveGroup.nothing)]
 
 candy = [
-    MoveType("nothing"),
-    MoveType("instrument", 1, 3),
-    MoveType("nothing"),
-    MoveType("instrument", 2, 5),
-    MoveType("nothing"),
-    MoveType("instrument", 3, 7),
-    MoveType("instrument", 3, 9),
-    MoveType("nothing"),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.instrument, 1, 3),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.instrument, 2, 5),
+    MoveType(MoveGroup.nothing),
+    MoveType(MoveGroup.instrument, 3, 7),
+    MoveType(MoveGroup.instrument, 3, 9),
+    MoveType(MoveGroup.nothing),
 ]
 
 cranky_moves = {"dk": cranky_0.copy(), "diddy": cranky_0.copy(), "lanky": cranky_1.copy(), "tiny": cranky_1.copy(), "chunky": cranky_1.copy()}
@@ -62,28 +74,28 @@ funky_moves = {"dk": funky.copy(), "diddy": funky.copy(), "lanky": funky.copy(),
 
 candy_moves = {"dk": candy.copy(), "diddy": candy.copy(), "lanky": candy.copy(), "tiny": candy.copy(), "chunky": candy.copy()}
 
-training = {"dive": MoveType("flag", 0x182), "orange": MoveType("flag", 0x184), "barrel": MoveType("flag", 0x185), "vine": MoveType("flag", 0x183)}
+training = {"dive": MoveType(MoveGroup.flag, 0x182), "orange": MoveType(MoveGroup.flag, 0x184), "barrel": MoveType(MoveGroup.flag, 0x185), "vine": MoveType(MoveGroup.flag, 0x183)}
 
-bfi = {"bfi": MoveType("flag", -2)}
+bfi = {"bfi": MoveType(MoveGroup.flag, -2)}
 
-first_move = {"base_slam": MoveType("nothing")}
+first_move = {"base_slam": MoveType(MoveGroup.nothing)}
 
 
 def convertItem(item: dict, kong: int) -> int:
     """Convert move item to encoded int."""
     master_info = 0
     flag = 0xFFFF  # -1
-    types = ["special", "slam", "gun", "ammo_belt", "instrument", "flag", "gb"]
-    flag_types = ["flag", "gb"]
-    shared_types = ["slam", "ammo_belt"]  # Instrument covered by diff
-    if item.type == "nothing":
+    types = [MoveGroup.special, MoveGroup.slam, MoveGroup.gun, MoveGroup.belt, MoveGroup.instrument, MoveGroup.flag, MoveGroup.gb]
+    flag_types = [MoveGroup.flag, MoveGroup.gb]
+    shared_types = [MoveGroup.slam, MoveGroup.belt]  # Instrument covered by diff
+    if item.type == MoveGroup.nothing:
         master_info = 7 << 5
     elif item.type in types:
         master_info = (types.index(item.type) & 7) << 5
         move_kong = kong & 7
         if item.type in shared_types:
             move_kong = 0
-        elif item.type == "instrument":
+        elif item.type == MoveGroup.instrument:
             if item.index > 1:
                 move_kong = 0
         move_lvl = (item.index - 1) & 3
