@@ -1,14 +1,75 @@
 """Convert file setup."""
 import os
 import shutil
+from enum import IntEnum, auto
 
 from BuildLib import float_to_hex, intf_to_float
+from BuildEnums import Maps
 from getMoveSignLocations import getMoveSignData
 from place_vines import generateVineSeries
 
 BUTTON_DIST_NORMAL = 20
 CAVES_ITEM_HEIGHT = 20
 
+class ObjectType(IntEnum):
+    """ObjectType enum."""
+    actor = auto()
+    modeltwo = auto()
+
+class ObjectAction(IntEnum):
+    """ObjectAction enum."""
+    add = auto()
+    delete = auto()
+    edit = auto()
+
+class GameObject:
+    """Class to store information regarding a game object."""
+
+    def __init__(self, 
+                 cls: ObjectType, 
+                 action: ObjectAction, 
+                 base_byte_map: Maps=None, 
+                 base_byte_id: int=None,
+                 *,
+                 x: float=None,
+                 y: float=None,
+                 z: float=None,
+                 rx: float=None,
+                 ry: float=None,
+                 rz: float=None,
+                 id: int=None,
+                 scale: float=None,
+                 obj_type: int=None,
+
+            ):
+        """Initialize with given parameters."""
+        self.cls = cls
+        self.action = action
+        self.base_byte_map = base_byte_map
+        self.base_byte_id = base_byte_id
+        self.x = x
+        self.y = y
+        self.z = z
+        self.rx = rx
+        self.ry = ry
+        self.rz = rz
+        self.id = id
+        self.scale = scale
+        self.obj_type = obj_type
+
+vacant_id = {}
+for x in range(216):
+    vacant_id[x] = 0x220
+
+def getVacantID(map: Maps):
+    id = vacant_id[map]
+    vacant_id[map] = id + 1
+    return id
+
+object_changes = [
+    GameObject(ObjectType.modeltwo, ObjectAction.add, Maps.Caves, 0x26, obj_type=0x2AC, x=120.997, y=50.167, z=1182.974, rx=0, ry=75.146, rz=0, id=0x170, scale=1),
+    GameObject(ObjectType.modeltwo, ObjectAction.add, Maps.Caves, 0x26, obj_type=0x2AB, x=120.997, y=20.167, z=1182.974, rx=0, ry=75.146, rz=0, id=getVacantID(Maps.Caves), scale=0.35),
+]
 
 def convertSetup(file_name):
     """Convert file type setup.

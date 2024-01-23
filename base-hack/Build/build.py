@@ -217,6 +217,7 @@ file_dict = [
     File(name="Majoras Mask Moon", pointer_table_index=TableNames.TexturesHUD, file_index=115, source_file="assets/displays/moon_santa.png", texture_format=TextureFormat.IA8),
     File(name="Scoff Head", pointer_table_index=TableNames.TexturesHUD, file_index=114, source_file="assets/hash/scoff_head.png", texture_format=TextureFormat.RGBA5551),
     File(name="Outlined Crosshair", pointer_table_index=TableNames.TexturesHUD, file_index=113, source_file="assets/displays/crosshair.png", texture_format=TextureFormat.IA8),
+    File(name="DK Dirt Face", pointer_table_index=TableNames.TexturesGeometry, file_index=0x1379, source_file="assets/displays/dirt_colored.png", texture_format=TextureFormat.RGBA5551),
 ]
 
 file_dict = file_dict + buildScripts()
