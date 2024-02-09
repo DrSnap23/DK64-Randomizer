@@ -737,6 +737,7 @@ SettingsMap = {
     "more_cutscene_skips": ExtraCutsceneSkips,
     "move_rando": MoveRando,
     "rambi_colors": CharacterColors,
+    "random_enemy_colors": RandomModels,
     "random_models": RandomModels,
     "random_prices": RandomPrices,
     "shockwave_status": ShockwaveStatus,
@@ -949,6 +950,7 @@ DeprecatedSettings = {
     SettingsStringEnum.choose_starting_moves,
     SettingsStringEnum.open_levels,
     SettingsStringEnum.high_req,
+    SettingsStringEnum.enemy_rando,
 }
 
 

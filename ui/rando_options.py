@@ -754,22 +754,6 @@ def disable_barrel_modal(evt):
         pass
 
 
-@bind("click", "enemy_rando")
-def disable_enemy_modal(evt):
-    """Disable Enemy Selector when Enemy Rando is off."""
-    disabled = True
-    selector = js.document.getElementById("enemies_modal")
-    if js.document.getElementById("enemy_rando").checked:
-        disabled = False
-    try:
-        if disabled:
-            selector.setAttribute("disabled", "disabled")
-        else:
-            selector.removeAttribute("disabled")
-    except AttributeError:
-        pass
-
-
 @bind("click", "hard_mode")
 def disable_hard_mode_modal(evt):
     """Disable Hard Mode Selector when Hard Mode is off."""
@@ -1039,7 +1023,6 @@ def update_ui_states(event):
     disable_barrel_modal(None)
     item_rando_list_changed(None)
     toggle_item_rando(None)
-    disable_enemy_modal(None)
     disable_hard_mode_modal(None)
     disable_excluded_songs_modal(None)
     toggle_bananaport_selector(None)

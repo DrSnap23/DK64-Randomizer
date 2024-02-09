@@ -1,4 +1,4 @@
-{% from 'macros.html.jinja2' import list_selector %}
+{% from 'macros.html.jinja2' import list_selector, dropdown_multiselector %}
 <div class="container" style="margin-top: 20px;">
     <div class="row">
         <div class="col border panel">
@@ -232,19 +232,7 @@
             <div class="col border panel">
                 <h2 class="title">GLOBAL</h2>
             <div class="flex-container">
-                <div class="form-check form-switch item-switch">
-                    <label data-toggle="tooltip"
-                            title="All normal enemies that spawn in the world are randomized.">
-                        <input class="form-check-input"
-                                type="checkbox"
-                                name="enemy_rando"
-                                id="enemy_rando"
-                                display_name="Shuffle Enemies"
-                                value="True"/>
-                        Shuffle Enemies
-                    </label>
-                    {{ list_selector(enemies, "enemies", "ENEMIES", "This will open a popup that will let you customize what enemies appear in the game.&#10;This defaults to All options.", 16, True) }}
-                {# Remove end </div> as it's included in the macro for formatting #}
+                {{ dropdown_multiselector("Shuffle Enemies", "enemies_selected", enemies, "enemies", "ENEMIES", "This will open a popup that will let you customize what enemies appear in the game.&#10;This defaults to All options.") }}
                 <div class="form-check form-switch item-switch">
                     <label data-toggle="tooltip"
                            title="Bonus Barrels are randomly chosen from the pool of available Bonus Barrels.">

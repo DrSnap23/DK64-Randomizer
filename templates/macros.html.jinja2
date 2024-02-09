@@ -1,3 +1,82 @@
+{% macro dropdown_multiselector(head, key, list, name, title, tooltip) %}
+    <div class="form-check form-switch item-switch item-select multi-container" id="{{ key }}_container">
+        <p class="select-title">{{ head }}</p>
+        <select class="selectpicker" name="{{ key }}" id="{{ key }}" display_name="{{ head }}" multiple>
+            {% for item in list %}
+                <option value="{{ item.value }}" data-content="<span class='dummy-checkbox'>✓</span>{{ item.name }}">
+                    {{ item.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('.selectpicker').selectpicker({
+                size: 5,
+                selectedTextFormat: "count > 0",
+                actionsBox: true,
+                styleBase: "form-control",
+                sanitize: false,
+            });
+            $('.selectpicker').selectpicker("render");
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+                $('.selectpicker').selectpicker('mobile');
+            }
+            const container_hook = document.getElementById("{{ key }}_container");
+            const options = document.getElementById("{{ key }}").getElementsByTagName("option");
+            const individual_items = container_hook.getElementsByTagName("a");
+            for (let i = 0; i < individual_items.length; i++) {
+                if (individual_items[i].getAttribute("role") == "option") {
+                    individual_items[i].addEventListener("mousedown", (e) => {
+                        console.log(e)
+                        const num_string = e.target.getAttribute("aria-posinset");
+                        if (!isNaN(num)) {
+                            const specific_option = options[Number(num_string)];
+                            if (specific_option.hasAttribute("selected")) {
+                                specific_option.removeAttribute("selected");
+                            } else {
+                                specific_option.setAttribute("selected", true);
+                            }
+                        }
+                    })
+                }
+            }
+            const buttons = container_hook.getElementsByTagName("button");
+            for (let b = 0; b < buttons.length; b++) {
+                buttons[b].addEventListener("click", (e) => {
+                    if (e.target.classList.contains("bs-select-all")) {
+                        for (let o = 0; o < options.length; o++) {
+                            options[o].setAttribute("selected", true);
+                        }
+                    } else if (e.target.classList.contains("bs-deselect-all")) {
+                        for (let o = 0; o < options.length; o++) {
+                            options[o].removeAttribute("selected");
+                        }
+                    }
+                })
+            }
+        })
+        /*
+        $("#{{ key }}_container a[role='option']").mousedown(function(e) {
+            var option_el = $("#{{ key }}").children(`:nth-child(${$(this).prop("aria-posinset")})`);
+            option_el.prop("selected", $(this).hasClass("selected"))
+            option_el.trigger('change');
+        });
+        
+        $("#{{ key }}_container button").click(function() {
+            if ($(this).hasClass("bs-select-all")) {
+                console.log("Clicked")
+                $('#{{ key }} option').prop('selected', true);
+                $('#{{ key }}').trigger('change');
+            } else if ($(this.hasClass("bs-deselect-all"))) {
+                $('#{{ key }} option:selected').prop('selected', false);
+                $('#{{ key }}').trigger('change');
+            }
+        });
+        */
+    </script>
+{% endmacro %}
 {% macro list_selector(list, name, title, tooltip, size, includeDisclaimer=False) %}
     <!-- Icon triggers modal -->
     <input class="customize"

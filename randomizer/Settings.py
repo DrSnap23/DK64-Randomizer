@@ -950,6 +950,10 @@ class Settings:
                 self.shuffled_location_types.append(Types.PreGivenMove)
         kongs = GetKongs()
 
+        # Handle Multiselectors which operate under a dropdown nature
+        print(self.enemies_selected)
+        self.enemy_rando = len(self.enemies_selected) > 0
+
         # B Locker and Troff n Scoff amounts Rando
         self.update_progression_totals()
 

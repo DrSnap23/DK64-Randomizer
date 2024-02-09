@@ -566,7 +566,7 @@ i {
   width: 250px;
 }
 
-.selected {
+.selected:not(li):not(a[role="option"]) {
   border-top-right-radius: 0;
   border-bottom-left-radius: 0.25rem !important;
   border-top: none;
@@ -783,4 +783,81 @@ td.directional_divider {
 
 .expandable-container.collapsed {
   display: none;
+}
+
+.bootstrap-select .filter-option-inner-inner {
+  font-size: 0.78rem;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item .text {
+  font-size: 0.75rem;
+  color: white;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item .bs-ok-default {
+  display: none!important;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item .dummy-checkbox {
+  border: 1px solid white;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  margin-right: 5px;
+  display: inline-block;
+  content: "";
+  color: rgba(0, 0, 0, 0);
+  text-align: center;
+}
+
+.bootstrap-select .dropdown-menu .dropdown-item.selected .dummy-checkbox {
+  background-color: #0c0c0c;
+  color: white;
+}
+
+.bootstrap-select .dropdown-menu .actions-btn {
+  font-size: 0.75rem;
+}
+
+/* SCROLLBAR */
+
+/* width */
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar-track {
+  background-color: #048243;
+}
+
+/* Handle */
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar-thumb {
+  background: #999;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.bootstrap-select .dropdown-menu .inner::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+.bootstrap-select .dropdown-toggle {
+  background-color: #048243;
+}
+
+.bootstrap-select .dropdown-menu {
+  background-color: #048243;
+}
+
+.multi-container {
+  z-index: 1000;
+}
+
+.multi-container .select-title {
+  font-size: 0.8rem;
 }
